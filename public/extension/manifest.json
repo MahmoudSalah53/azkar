@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Athkar",
+  "version": "1.0",
+  "description": "Plays athkar when the user opens a new tab",
+  "permissions": [],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["audio.mp3"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
