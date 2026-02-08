@@ -1,3 +1,5 @@
+let playing = false;
+
 async function ensureOffscreenDocument() {
   const existing = await chrome.offscreen.hasDocument();
   if (existing) return;
@@ -5,20 +7,28 @@ async function ensureOffscreenDocument() {
   await chrome.offscreen.createDocument({
     url: "offscreen.html",
     reasons: ["AUDIO_PLAYBACK"],
-    justification: "Play sound when new tab opens",
+    justification: "Play sound when navigation happens",
   });
 }
 
-// new tab
-chrome.tabs.onCreated.addListener(async (tab) => {
+async function playOnce() {
+  if (playing) return; // block duplicate triggers
+  playing = true;
+
   await ensureOffscreenDocument();
   chrome.runtime.sendMessage({ play: true });
+
+  setTimeout(() => playing = false, 1500); // unlock after 1.5 seconds
+}
+
+// new tab opened
+chrome.tabs.onCreated.addListener(() => {
+  playOnce();
 });
 
 // change url
-// chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
-//   if (changeInfo.url) {
-//     await ensureOffscreenDocument();
-//     chrome.runtime.sendMessage({ play: true });
-//   }
-// });
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (changeInfo.url) {
+    playOnce();
+  }
+});
