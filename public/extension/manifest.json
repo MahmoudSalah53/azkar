@@ -1,10 +1,14 @@
 {
   "manifest_version": 3,
   "name": "New Tab Sound",
-  "version": "1.0",
-  "permissions": ["tabs", "offscreen"],
+  "version": "1.1",
+  "permissions": ["tabs", "offscreen", "storage"],
   "background": {
     "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Settings"
   },
   "web_accessible_resources": [
     {

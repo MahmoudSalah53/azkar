@@ -12,13 +12,19 @@ async function ensureOffscreenDocument() {
 }
 
 async function playOnce() {
-  if (playing) return; // block duplicate triggers
+  if (playing) return; // Prevent rapid repetition
   playing = true;
 
-  await ensureOffscreenDocument();
-  chrome.runtime.sendMessage({ play: true });
+  // 1. Fetch current volume level from storage (Default 1.0 if not set)
+  const data = await chrome.storage.local.get({ volume: 1.0 });
+  const currentVolume = data.volume;
 
-  setTimeout(() => playing = false, 3000); // unlock after 3 seconds
+  await ensureOffscreenDocument();
+
+  // 2. Send play command with volume value
+  chrome.runtime.sendMessage({ play: true, volume: currentVolume });
+
+  setTimeout(() => playing = false, 3000);
 }
 
 // new tab opened

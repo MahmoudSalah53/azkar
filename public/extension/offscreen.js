@@ -3,9 +3,12 @@ chrome.runtime.onMessage.addListener(async (msg) => {
     try {
       const audioUrl = chrome.runtime.getURL("audio.mp3");
       const audio = new Audio(audioUrl);
-      audio.volume = 1.0;
+
+      // Use the volume from the message, setting 1.0 as a fallback value
+      audio.volume = msg.volume !== undefined ? msg.volume : 1.0;
+
       await audio.play();
-      console.log("Audio played successfully");
+      console.log("Audio played successfully with volume:", audio.volume);
     } catch (err) {
       console.log("Error playing audio:", err);
     }
