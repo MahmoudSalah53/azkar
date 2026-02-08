@@ -18,7 +18,7 @@ async function playOnce() {
   await ensureOffscreenDocument();
   chrome.runtime.sendMessage({ play: true });
 
-  setTimeout(() => playing = false, 1500); // unlock after 1.5 seconds
+  setTimeout(() => playing = false, 3000); // unlock after 3 seconds
 }
 
 // new tab opened
