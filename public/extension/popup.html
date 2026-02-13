@@ -3,47 +3,68 @@
 
 <head>
   <meta charset="UTF-8">
-  <style>
-    body {
-      width: 150px;
-      padding: 10px;
-      font-family: sans-serif;
-      text-align: center;
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
 
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-    }
-  </style>
 </head>
 
 <body>
-  <!-- volume control -->
-  <label for="vol">Volume: <span id="volVal">100%</span></label>
-  <input type="range" id="vol" min="0" max="1" step="0.1" value="1">
 
-  <!-- timer control -->
-  <label for="timer">تشغيل الصوت كل:</label>
-  <select id="timer">
-    <option value="0">إيقاف</option>
-    <option value="600000">10 دقائق</option>
-    <option value="1800000">30 دقيقة</option>
-    <option value="3600000">ساعة</option>
-    <option value="7200000">ساعتين</option>
-  </select>
+  <div class="header">
+    <div class="header-title">🔔 التذكير الصوتي</div>
+  </div>
 
-  <!-- new tab control -->
-  <label>
-    <input type="checkbox" id="playNewTab">
-    تشغيل الصوت عند كل تاب جديد
-  </label>
+  <div class="body">
 
+    <!-- volume -->
+    <div class="vol-wrap">
+      <div class="row-label">مستوى الصوت</div>
+      <div class="vol-row">
+        <span class="vol-icon" id="volIcon">🔊</span>
+        <input type="range" id="vol" min="0" max="1" step="0.1" value="1">
+      </div>
+    </div>
+
+    <!-- timer -->
+    <div class="select-wrap">
+      <div class="row-label">تنبيه كل</div>
+      <select id="timer">
+        <option value="0">إيقاف</option>
+        <option value="600000">١٠ دقائق</option>
+        <option value="1800000">٣٠ دقيقة</option>
+        <option value="3600000">ساعة</option>
+        <option value="7200000">ساعتين</option>
+      </select>
+    </div>
+
+    <!-- new tab -->
+    <label class="check-wrap">
+      <input type="checkbox" id="playNewTab">
+      <span class="custom-check"></span>
+      <span class="check-label">صوت عند فتح تبويب جديد</span>
+    </label>
+
+  </div>
+
+  <div class="footer"></div>
+
+  <script>
+    // volume display + slider track fill
+    const volSlider = document.getElementById('vol');
+    const volVal = document.getElementById('volVal');
+    const volIcon = document.getElementById('volIcon');
+
+    function updateVol() {
+      const v = Math.round(volSlider.value * 100);
+      volVal.textContent = v + '%';
+      volSlider.style.setProperty('--pct', v);
+      volIcon.textContent = v === 0 ? '🔇' : v < 40 ? '🔉' : '🔊';
+    }
+
+    volSlider.addEventListener('input', updateVol);
+    updateVol();
+  </script>
 
   <script src="popup.js"></script>
 </body>

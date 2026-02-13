@@ -4,22 +4,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const timerSelect = document.getElementById('timer');
     const checkbox = document.getElementById('playNewTab');
 
+    let lastVol = 1.0; // last volume value
+
+    // Update icon based on volume
+    function updateIcon(val) {
+        volIcon.textContent = val === 0 ? '🔇' : val < 0.4 ? '🔉' : '🔊';
+        slider.style.setProperty('--pct', Math.round(val * 100));
+    }
+
     // Load stored volume when the popup opens
     chrome.storage.local.get(['volume'], (result) => {
         const vol = result.volume !== undefined ? result.volume : 1.0;
         slider.value = vol;
-        label.textContent = Math.round(vol * 100) + '%';
+        if (vol > 0) lastVol = vol;
+        updateIcon(vol);
     });
 
     // Save volume when slider changes
     slider.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
-        label.textContent = Math.round(val * 100) + '%';
-
-        // Save value in storage for background usage
+        if (val > 0) lastVol = val;
+        updateIcon(val);
         chrome.storage.local.set({ volume: val });
     });
 
+    // Mute/Unmute volume
+    volIcon.addEventListener('click', () => {
+        if (parseFloat(slider.value) > 0) {
+            lastVol = parseFloat(slider.value);
+            slider.value = 0;
+        } else {
+            slider.value = lastVol;
+        }
+        updateIcon(parseFloat(slider.value));
+        chrome.storage.local.set({ volume: parseFloat(slider.value) });
+    });
 
     // Update and start the timer when the user selects a new duration
     timerSelect.addEventListener('change', (e) => {
