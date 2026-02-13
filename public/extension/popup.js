@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const slider = document.getElementById('vol');
     const label = document.getElementById('volVal');
     const timerSelect = document.getElementById('timer');
+    const checkbox = document.getElementById('playNewTab');
 
     // Load stored volume when the popup opens
     chrome.storage.local.get(['volume'], (result) => {
@@ -29,5 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimer: true,
             duration: time
         });
+    });
+
+    // Load saved value
+    chrome.storage.local.get({ playNewTab: true }, (result) => {
+        checkbox.checked = result.playNewTab;
+    });
+
+    // Save value when changed
+    checkbox.addEventListener('change', (e) => {
+        chrome.storage.local.set({ playNewTab: e.target.checked });
     });
 });

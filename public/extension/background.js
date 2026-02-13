@@ -59,8 +59,11 @@ function startTimer(duration) {
 // ======================
 
 // Play audio immediately when a new tab is opened
-chrome.tabs.onCreated.addListener(() => {
-  playOnce();
+chrome.tabs.onCreated.addListener(async () => {
+  const data = await chrome.storage.local.get({ playNewTab: true });
+  if (data.playNewTab) {
+    playOnce();
+  }
 });
 
 
