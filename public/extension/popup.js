@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let lastVol = 1.0; // last volume value
 
+    // Load stored timer value (default 10 minutes)
+    chrome.storage.local.get({ timer: 600000 }, (result) => {
+        timerSelect.value = result.timer;
+    });
+
     // Update icon based on volume
     function updateIcon(val) {
         volIcon.textContent = val === 0 ? '🔇' : val < 0.4 ? '🔉' : '🔊';
