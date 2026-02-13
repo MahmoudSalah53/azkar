@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const slider = document.getElementById('vol');
     const label = document.getElementById('volVal');
+    const timerSelect = document.getElementById('timer');
 
     // Load stored volume when the popup opens
     chrome.storage.local.get(['volume'], (result) => {
@@ -16,5 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Save value in storage for background usage
         chrome.storage.local.set({ volume: val });
+    });
+
+
+    // Update and start the timer when the user selects a new duration
+    timerSelect.addEventListener('change', (e) => {
+        const time = Number(e.target.value);
+        chrome.storage.local.set({ timer: time });
+
+        chrome.runtime.sendMessage({
+            setTimer: true,
+            duration: time
+        });
     });
 });
