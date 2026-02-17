@@ -159,6 +159,63 @@ select:focus {
     border-color: var(--gold);
 }
 
+.custom-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 2px;
+}
+
+#customTimerWrap {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#customMinutes {
+    width: 0;
+    /* Let flex-grow handle it */
+    flex: 1;
+    background: #fff;
+    border: 1.5px solid rgba(201, 168, 76, 0.3);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    outline: none;
+    color: var(--teal);
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+#customMinutes:focus {
+    border-color: var(--teal);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(26, 95, 90, 0.1);
+}
+
+.input-unit {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--teal);
+    background: var(--gold-light);
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: var(--teal-dark);
+}
+
 /* ── CHECKBOX ── */
 .check-wrap {
     background: var(--cream-2);

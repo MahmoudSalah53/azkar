@@ -1,23 +1,22 @@
-import { playOnce } from '../audio/player.js';
-
-let timerInterval = null; // Holds the current timer so we can clear or update it
-
 /**
- * Start or update the timer with a given duration
- * @param {number} duration - The duration in milliseconds
+ * Start or update the timer using chrome.alarms (Reliable for Manifest V3)
+ * @param {number} durationMs - The duration in milliseconds
  */
-export function startTimer(duration) {
-    // If a timer already exists, clear it first
-    if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
+export async function startTimer(durationMs) {
+    // 1. Clear any existing alarm
+    await chrome.alarms.clear("azkarAudioAlarm");
 
-    // If duration is 0 → stop the timer
-    if (duration === 0) return;
+    // 2. If duration is 0 → stop
+    if (durationMs <= 0) return;
 
-    // Start a new timer: call playOnce every "duration" milliseconds
-    timerInterval = setInterval(() => {
-        playOnce();
-    }, duration);
+    // 3. Create a periodic alarm
+    // Note: chrome.alarms takes minutes as a unit
+    const periodInMinutes = durationMs / 60000;
+
+    chrome.alarms.create("azkarAudioAlarm", {
+        periodInMinutes: periodInMinutes,
+        delayInMinutes: periodInMinutes // Start after the first interval
+    });
+
+    console.log(`Alarm set for every ${periodInMinutes} minutes`);
 }

@@ -1,6 +1,7 @@
 import { startTimer } from './modules/timer/manager.js';
 import { initTabListeners } from './modules/tabs/listener.js';
 import { getSetting } from './modules/storage/sync.js';
+import { playOnce } from './modules/audio/player.js';
 
 // ======================
 // INITIALIZATION
@@ -8,6 +9,13 @@ import { getSetting } from './modules/storage/sync.js';
 
 // Initialize Tab Listeners
 initTabListeners();
+
+// Handle Periodic Alarms
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "azkarAudioAlarm") {
+    playOnce();
+  }
+});
 
 // ======================
 // POPUP MESSAGES
@@ -20,19 +28,7 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
-
-// ======================
-// AUTOMATIC TIMER ON STARTUP/INSTALL
-// ======================
-
-/**
- * Sync timer from storage
- */
-async function syncTimer() {
-  const timerDuration = await getSetting('timer');
-  startTimer(timerDuration);
-}
-
+git a
 // Start on extension startup
 chrome.runtime.onStartup.addListener(syncTimer);
 

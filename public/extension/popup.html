@@ -36,7 +36,17 @@
         <option value="1800000">٣٠ دقيقة</option>
         <option value="3600000">ساعة</option>
         <option value="7200000">ساعتين</option>
+        <option value="custom">موعد مخصص...</option>
       </select>
+    </div>
+
+    <!-- custom timer input -->
+    <div id="customTimerWrap" class="select-wrap" style="display: none;">
+      <div class="row-label">دقائق مخصصة</div>
+      <div class="custom-input-row">
+        <input type="number" id="customMinutes" min="1" placeholder="مثلاً: 7">
+        <span class="input-unit">دقيقة</span>
+      </div>
     </div>
 
     <!-- new tab -->
