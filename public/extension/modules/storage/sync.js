@@ -1,7 +1,7 @@
 export const DEFAULTS = {
-    volume: 1.0,
-    timer: 0, // 0 means off
-    playNewTab: true
+    volume: 0.5, // 50%
+    timer: 300000, // 5 minutes
+    playNewTab: false // false = disabled, true = enabled
 };
 
 /**
