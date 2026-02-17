@@ -28,7 +28,6 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
-git a
 // Start on extension startup
 chrome.runtime.onStartup.addListener(syncTimer);
 
