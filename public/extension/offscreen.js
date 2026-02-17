@@ -1,7 +1,7 @@
 chrome.runtime.onMessage.addListener(async (msg) => {
   if (msg.play) {
     try {
-      const audioUrl = chrome.runtime.getURL("audio.mp3");
+      const audioUrl = chrome.runtime.getURL("modules/audio/audio.mp3");
       const audio = new Audio(audioUrl);
 
       // Use the volume from the message, setting 1.0 as a fallback value

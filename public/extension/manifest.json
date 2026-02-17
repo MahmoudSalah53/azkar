@@ -2,9 +2,14 @@
   "manifest_version": 3,
   "name": "New Tab Sound",
   "version": "1.1",
-  "permissions": ["tabs", "offscreen", "storage"],
+  "permissions": [
+    "tabs",
+    "offscreen",
+    "storage"
+  ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "action": {
     "default_popup": "popup.html",
@@ -12,8 +17,12 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["audio.mp3"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "modules/audio/audio.mp3"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ]
 }

@@ -31,7 +31,7 @@
       <div class="row-label">تنبيه كل</div>
       <select id="timer">
         <option value="0">إيقاف</option>
-        <option value="600000">١٠ دقائق</option>
+        <option value="600000">10 دقائق</option>
         <option value="1800000">٣٠ دقيقة</option>
         <option value="3600000">ساعة</option>
         <option value="7200000">ساعتين</option>
@@ -49,24 +49,7 @@
 
   <div class="footer"></div>
 
-  <script>
-    // volume display + slider track fill
-    const volSlider = document.getElementById('vol');
-    const volVal = document.getElementById('volVal');
-    const volIcon = document.getElementById('volIcon');
-
-    function updateVol() {
-      const v = Math.round(volSlider.value * 100);
-      volVal.textContent = v + '%';
-      volSlider.style.setProperty('--pct', v);
-      volIcon.textContent = v === 0 ? '🔇' : v < 40 ? '🔉' : '🔊';
-    }
-
-    volSlider.addEventListener('input', updateVol);
-    updateVol();
-  </script>
-
-  <script src="popup.js"></script>
+  <script type="module" src="popup.js"></script>
 </body>
 
 </html>
