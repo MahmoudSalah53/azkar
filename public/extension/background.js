@@ -28,11 +28,36 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
+// ======================
+// LIFECYCLE
+// ======================
+
+/**
+ * Synchronize the timer with saved settings
+ */
+async function syncTimer() {
+  const duration = await getSetting('timer');
+  startTimer(duration);
+}
+
+// Handle extension installation
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    // Try to open the popup automatically (Supported in Chrome 127+)
+    if (chrome.action && chrome.action.openPopup) {
+      chrome.action.openPopup().catch(() => {
+        // Fallback to opening in a tab if popup cannot be opened (e.g. not pinned)
+        chrome.tabs.create({ url: 'popup.html' });
+      });
+    } else {
+      chrome.tabs.create({ url: 'popup.html' });
+    }
+  }
+  syncTimer();
+});
+
 // Start on extension startup
 chrome.runtime.onStartup.addListener(syncTimer);
-
-// Also start on install or reload for better dev/user experience
-chrome.runtime.onInstalled.addListener(syncTimer);
 
 // Initial sync in case the worker just started
 syncTimer();
