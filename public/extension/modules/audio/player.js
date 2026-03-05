@@ -1,4 +1,5 @@
 import { getSetting } from '../storage/sync.js';
+import { audios } from './list.js';
 
 let playing = false;
 
@@ -23,13 +24,18 @@ export async function playOnce() {
     if (playing) return; // Prevent rapid repetition
     playing = true;
 
-    // Fetch the current volume from storage
+    // Fetch the current volume and selected audio from storage
     const currentVolume = await getSetting('volume');
+    const selectedAudioId = await getSetting('selectedAudio');
+
+    // Find the requested audio object, fallback to default
+    const audioObj = audios.find((a) => a.id === selectedAudioId) || audios[0];
+    const audioPath = audioObj.path;
 
     await ensureOffscreenDocument();
 
-    // Send the play command to the offscreen page with volume
-    chrome.runtime.sendMessage({ play: true, volume: currentVolume });
+    // Send the play command to the offscreen page with volume and audio path
+    chrome.runtime.sendMessage({ play: true, volume: currentVolume, audioPath: audioPath });
 
     // Allow playing again after 3 seconds
     setTimeout(() => playing = false, 3000);

@@ -1,7 +1,8 @@
 export const DEFAULTS = {
     volume: 0.5, // 50%
     timer: 300000, // 5 minutes
-    playNewTab: false // false = disabled, true = enabled
+    playNewTab: false, // false = disabled, true = enabled
+    selectedAudio: "default"
 };
 
 /**

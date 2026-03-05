@@ -1,4 +1,5 @@
 import { getSetting, setSetting } from './modules/storage/sync.js';
+import { audios } from './modules/audio/list.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const slider = document.getElementById('vol');
@@ -7,6 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const customTimerWrap = document.getElementById('customTimerWrap');
     const customMinutesInput = document.getElementById('customMinutes');
     const checkbox = document.getElementById('playNewTab');
+    const audioSelect = document.getElementById('audioSelect');
 
     let lastVol = 1.0;
 
@@ -21,6 +23,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const timerValue = await getSetting('timer');
     const volumeValue = await getSetting('volume');
     const playNewTabValue = await getSetting('playNewTab');
+    const selectedAudioValue = await getSetting('selectedAudio');
+
+    // Populate audios
+    audios.forEach(audio => {
+        const option = document.createElement('option');
+        option.value = audio.id;
+        option.textContent = audio.name;
+        audioSelect.appendChild(option);
+    });
+    audioSelect.value = selectedAudioValue;
 
     // Handle initial timer selection
     const isStandardOption = [...timerSelect.options].some(opt => opt.value === String(timerValue));
@@ -78,6 +90,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             await setSetting('timer', time);
             chrome.runtime.sendMessage({ setTimer: true, duration: time });
         }
+    });
+
+    // Handle audio selection change
+    audioSelect.addEventListener('change', async (e) => {
+        await setSetting('selectedAudio', e.target.value);
     });
 
     // Save value when checkbox changed
