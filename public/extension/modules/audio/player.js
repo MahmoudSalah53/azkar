@@ -1,4 +1,4 @@
-import { getSetting } from '../storage/sync.js';
+import { getSetting, setSetting } from '../storage/sync.js';
 import { audios } from './list.js';
 
 let playing = false;
@@ -31,6 +31,10 @@ export async function playOnce() {
     // Find the requested audio object, fallback to default
     const audioObj = audios.find((a) => a.id === selectedAudioId) || audios[0];
     const audioPath = audioObj.path;
+
+    // Increment count
+    const count = await getSetting('dhikrCount');
+    await setSetting('dhikrCount', count + 1);
 
     await ensureOffscreenDocument();
 

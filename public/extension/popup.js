@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const customMinutesInput = document.getElementById('customMinutes');
     const checkbox = document.getElementById('playNewTab');
     const audioSelect = document.getElementById('audioSelect');
+    const countValue = document.getElementById('countValue');
 
     let lastVol = 1.0;
 
@@ -24,6 +25,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const volumeValue = await getSetting('volume');
     const playNewTabValue = await getSetting('playNewTab');
     const selectedAudioValue = await getSetting('selectedAudio');
+    const dhikrCountValue = await getSetting('dhikrCount');
+
+    // Populate count
+    countValue.textContent = dhikrCountValue.toLocaleString('ar-EG');
 
     // Populate audios
     audios.forEach(audio => {
@@ -100,5 +105,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Save value when checkbox changed
     checkbox.addEventListener('change', async (e) => {
         await setSetting('playNewTab', e.target.checked);
+    });
+
+    // Listen for storage changes to update count dynamically if audio plays while popup is open
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+        if (namespace === 'local' && changes.dhikrCount) {
+            countValue.textContent = changes.dhikrCount.newValue.toLocaleString('ar-EG');
+        }
     });
 });
