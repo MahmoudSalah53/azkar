@@ -35,7 +35,15 @@
     <!-- audio format -->
     <div class="select-wrap">
       <div class="row-label">صيغة التذكير</div>
-      <select id="audioSelect"></select>
+      <div class="custom-select" id="audioSelectWrap">
+        <div class="custom-select__trigger" id="audioSelectTrigger">
+          <span class="custom-select__text" id="audioSelectText"></span>
+          <svg class="custom-select__arrow" width="10" height="6" viewBox="0 0 10 6">
+            <path d="M0 0l5 6 5-6z" fill="#1A5F5A" />
+          </svg>
+        </div>
+        <div class="custom-select__options" id="audioSelectOptions"></div>
+      </div>
     </div>
 
     <!-- timer -->
