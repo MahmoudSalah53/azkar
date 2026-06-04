@@ -407,3 +407,46 @@ select:focus {
 .custom-select__option:hover,
 .custom-select__option.selected { background: var(--cream-2); color: var(--teal); }
 .custom-select__option.selected { font-weight: 700; }
+
+
+/* ── RESET BUTTON ── */
+.reset-btn {
+    background: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 6px;
+    color: var(--teal-dark);
+    font-size: 14px;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    line-height: 1;
+    padding: 0;
+}
+
+.reset-btn:hover {
+    background: rgba(255,255,255,0.45);
+}
+
+/* Confirm state */
+.reset-btn.confirm {
+    background: #c0392b;
+    border-color: #922b21;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    width: auto;
+    padding: 0 6px;
+    transform: none;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.reset-btn.confirm:hover {
+    background: #e74c3c;
+    transform: none;
+}

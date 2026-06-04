@@ -12,8 +12,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const audioSelectOptions = document.getElementById('audioSelectOptions');
     const audioSelectWrap = document.getElementById('audioSelectWrap');
     const countValue = document.getElementById('countValue');
+    const resetBtn = document.getElementById('resetBtn');
 
     let lastVol = 1.0;
+    let resetTimeout = null;
 
     function updateUI(val) {
         volIcon.textContent = val === 0 ? '🔇' : val < 0.4 ? '🔉' : '🔊';
@@ -68,6 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (volumeValue > 0) lastVol = volumeValue;
     updateUI(volumeValue);
 
+    // ── Volume ──
     slider.addEventListener('input', async (e) => {
         const val = parseFloat(e.target.value);
         if (val > 0) lastVol = val;
@@ -81,6 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await setSetting('volume', newVal);
     });
 
+    // ── Timer Select ──
     timerSelect.addEventListener('change', async (e) => {
         const val = e.target.value;
         if (val === 'custom') {
@@ -103,10 +107,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    // ── New Tab Checkbox ──
     checkbox.addEventListener('change', async (e) => {
         await setSetting('playNewTab', e.target.checked);
     });
 
+    // ── Reset Button ──
+    resetBtn.addEventListener('click', async () => {
+        if (resetBtn.classList.contains('confirm')) {
+            clearTimeout(resetTimeout);
+            resetBtn.classList.remove('confirm');
+            resetBtn.textContent = '↺';
+            resetBtn.style.width = '26px';
+            await chrome.storage.local.set({ dhikrCount: 0 });
+            countValue.textContent = (0).toLocaleString('ar-EG');
+        } else {
+            resetBtn.classList.add('confirm');
+            resetBtn.textContent = 'تأكيد؟';
+            resetBtn.style.width = 'auto';
+            resetTimeout = setTimeout(() => {
+                resetBtn.classList.remove('confirm');
+                resetBtn.textContent = '↺';
+                resetBtn.style.width = '26px';
+            }, 3000);
+        }
+    });
+
+    // ── Storage Listener ──
     chrome.storage.onChanged.addListener((changes, namespace) => {
         if (namespace === 'local' && changes.dhikrCount) {
             countValue.textContent = changes.dhikrCount.newValue.toLocaleString('ar-EG');
