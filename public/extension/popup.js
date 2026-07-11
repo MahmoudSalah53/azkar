@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const timerSelect = document.getElementById('timer');
     const customTimerWrap = document.getElementById('customTimerWrap');
     const customMinutesInput = document.getElementById('customMinutes');
-    const checkbox = document.getElementById('playNewTab');
+    const reminderTypeTabs = document.getElementById('reminderTypeTabs');
+    const soundOptions = document.getElementById('soundOptions');
     const audioSelectText = document.getElementById('audioSelectText');
     const audioSelectOptions = document.getElementById('audioSelectOptions');
     const audioSelectWrap = document.getElementById('audioSelectWrap');
@@ -25,10 +26,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const timerValue = await getSetting('timer');
     const volumeValue = await getSetting('volume');
-    const playNewTabValue = await getSetting('playNewTab');
+    const reminderTypeValue = await getSetting('reminderType');
     const selectedAudioValue = await getSetting('selectedAudio');
     const dhikrCountValue = await getSetting('dhikrCount');
 
+    function setReminderType(type) {
+        reminderTypeTabs.querySelectorAll('.segment-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.type === type);
+        });
+        soundOptions.classList.toggle('is-hidden', type === 'notification');
+    }
+
+    function formatCustomMinutes(ms) {
+        const mins = ms / 60000;
+        return Number.isInteger(mins) ? String(mins) : String(parseFloat(mins.toFixed(2)));
+    }
+
+    setReminderType(reminderTypeValue);
     countValue.textContent = dhikrCountValue.toLocaleString('ar-EG');
 
     // ── Custom Audio Select ──
@@ -63,10 +77,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else if (timerValue > 0) {
         timerSelect.value = 'custom';
         customTimerWrap.style.display = 'block';
-        customMinutesInput.value = Math.round(timerValue / 60000);
+        customMinutesInput.value = formatCustomMinutes(timerValue);
     }
 
-    checkbox.checked = playNewTabValue;
     if (volumeValue > 0) lastVol = volumeValue;
     updateUI(volumeValue);
 
@@ -99,17 +112,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     customMinutesInput.addEventListener('input', async (e) => {
-        const mins = Number(e.target.value);
+        const mins = parseFloat(e.target.value);
         if (mins > 0) {
-            const time = mins * 60000;
+            const time = Math.round(mins * 60000);
             await setSetting('timer', time);
             chrome.runtime.sendMessage({ setTimer: true, duration: time });
         }
     });
 
-    // ── New Tab Checkbox ──
-    checkbox.addEventListener('change', async (e) => {
-        await setSetting('playNewTab', e.target.checked);
+    // ── Reminder Type Tabs ──
+    reminderTypeTabs.querySelectorAll('.segment-tab').forEach(tab => {
+        tab.addEventListener('click', async () => {
+            const type = tab.dataset.type;
+            setReminderType(type);
+            await setSetting('reminderType', type);
+        });
     });
 
     // ── Reset Button ──

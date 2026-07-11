@@ -2,6 +2,7 @@ export const DEFAULTS = {
     volume: 0.5, // 50%
     timer: 300000, // 5 minutes
     playNewTab: false, // false = disabled, true = enabled
+    reminderType: 'sound', // 'sound' | 'notification'
     selectedAudio: "default",
     dhikrCount: 0
 };

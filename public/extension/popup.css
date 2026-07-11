@@ -119,6 +119,16 @@ body {
     color: var(--teal-dark);
 }
 
+#soundOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#soundOptions.is-hidden {
+    display: none;
+}
+
 /* ── VOLUME ── */
 .vol-wrap {
     background: var(--cream-2);
@@ -274,6 +284,43 @@ select:focus {
     padding: 6px 10px;
     border-radius: 8px;
     color: var(--teal-dark);
+}
+
+/* ── SEGMENT TABS ── */
+.segment-tabs {
+    display: flex;
+    gap: 4px;
+    background: #fff;
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    border-radius: 8px;
+    padding: 3px;
+}
+
+.segment-tab {
+    flex: 1;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    padding: 7px 8px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    line-height: 1.3;
+}
+
+.segment-tab:hover:not(.active) {
+    color: var(--teal);
+    background: rgba(26, 95, 90, 0.06);
+}
+
+.segment-tab.active {
+    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(26, 95, 90, 0.25);
 }
 
 /* ── CHECKBOX ── */

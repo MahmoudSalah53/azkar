@@ -1,7 +1,7 @@
 import { startTimer } from './modules/timer/manager.js';
 import { initTabListeners } from './modules/tabs/listener.js';
 import { getSetting } from './modules/storage/sync.js';
-import { playOnce } from './modules/audio/player.js';
+import { dispatchReminder } from './modules/reminder/dispatch.js';
 
 // ======================
 // INITIALIZATION
@@ -12,8 +12,8 @@ initTabListeners();
 
 // Handle Periodic Alarms
 chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "azkarAudioAlarm") {
-    playOnce();
+  if (alarm.name === "azkarReminderAlarm") {
+    dispatchReminder();
   }
 });
 

@@ -4,7 +4,8 @@
  */
 export async function startTimer(durationMs) {
     // 1. Clear any existing alarm
-    await chrome.alarms.clear("azkarAudioAlarm");
+    await chrome.alarms.clear("azkarReminderAlarm");
+    await chrome.alarms.clear("azkarAudioAlarm"); // legacy cleanup
 
     // 2. If duration is 0 → stop
     if (durationMs <= 0) return;
@@ -13,9 +14,9 @@ export async function startTimer(durationMs) {
     // Note: chrome.alarms takes minutes as a unit
     const periodInMinutes = durationMs / 60000;
 
-    chrome.alarms.create("azkarAudioAlarm", {
+    chrome.alarms.create("azkarReminderAlarm", {
         periodInMinutes: periodInMinutes,
-        delayInMinutes: periodInMinutes // Start after the first interval
+        delayInMinutes: periodInMinutes
     });
 
     console.log(`Alarm set for every ${periodInMinutes} minutes`);
