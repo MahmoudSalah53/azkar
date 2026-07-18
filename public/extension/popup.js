@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const audioSelectWrap = document.getElementById('audioSelectWrap');
     const countValue = document.getElementById('countValue');
     const resetBtn = document.getElementById('resetBtn');
+    const bubbleToggle = document.getElementById('bubbleToggle');
 
     let lastVol = 1.0;
     let resetTimeout = null;
@@ -29,12 +30,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     const reminderTypeValue = await getSetting('reminderType');
     const selectedAudioValue = await getSetting('selectedAudio');
     const dhikrCountValue = await getSetting('dhikrCount');
+    const bubbleEnabledValue = await getSetting('bubbleEnabled');
 
-    function setReminderType(type) {
+    function setBubbleToggleUI(enabled) {
+        bubbleToggle.checked = !!enabled;
+    }
+
+    setBubbleToggleUI(bubbleEnabledValue);
+
+    let reminderType = {
+        sound: !!reminderTypeValue.sound,
+        notification: !!reminderTypeValue.notification,
+    };
+    if (!reminderType.sound && !reminderType.notification) {
+        reminderType = { sound: true, notification: false };
+    }
+
+    function applyReminderTypeUI() {
         reminderTypeTabs.querySelectorAll('.segment-tab').forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.type === type);
+            const on = !!reminderType[tab.dataset.type];
+            tab.classList.toggle('active', on);
+            tab.setAttribute('aria-pressed', String(on));
         });
-        soundOptions.classList.toggle('is-hidden', type === 'notification');
+        soundOptions.classList.toggle('is-hidden', !reminderType.sound);
     }
 
     function formatCustomMinutes(ms) {
@@ -42,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return Number.isInteger(mins) ? String(mins) : String(parseFloat(mins.toFixed(2)));
     }
 
-    setReminderType(reminderTypeValue);
+    applyReminderTypeUI();
     countValue.textContent = dhikrCountValue.toLocaleString('ar-EG');
 
     // ── Custom Audio Select ──
@@ -120,13 +138,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // ── Reminder Type Tabs ──
+    // ── Reminder Type (multi-select checkboxes) ──
     reminderTypeTabs.querySelectorAll('.segment-tab').forEach(tab => {
         tab.addEventListener('click', async () => {
             const type = tab.dataset.type;
-            setReminderType(type);
-            await setSetting('reminderType', type);
+            const turningOff = !!reminderType[type];
+            const otherOn = type === 'sound'
+                ? reminderType.notification
+                : reminderType.sound;
+
+            // Keep at least one option selected
+            if (turningOff && !otherOn) return;
+
+            reminderType = { ...reminderType, [type]: !turningOff };
+            applyReminderTypeUI();
+            await setSetting('reminderType', reminderType);
         });
+    });
+
+    // ── Floating bubble toggle ──
+    bubbleToggle.addEventListener('change', async () => {
+        await setSetting('bubbleEnabled', bubbleToggle.checked);
     });
 
     // ── Reset Button ──

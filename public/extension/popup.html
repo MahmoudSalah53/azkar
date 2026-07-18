@@ -29,9 +29,9 @@
     <!-- reminder type -->
     <div class="select-wrap">
       <div class="row-label">طريقة التذكير</div>
-      <div class="segment-tabs" id="reminderTypeTabs">
-        <button type="button" class="segment-tab active" data-type="sound">صوت</button>
-        <button type="button" class="segment-tab" data-type="notification">إشعار</button>
+      <div class="segment-tabs segment-tabs--check" id="reminderTypeTabs">
+        <button type="button" class="segment-tab active" data-type="sound" aria-pressed="true">صوت</button>
+        <button type="button" class="segment-tab" data-type="notification" aria-pressed="false">إشعار</button>
       </div>
     </div>
 
@@ -83,6 +83,13 @@
         <span class="input-unit">دقيقة</span>
       </div>
     </div>
+
+    <!-- floating bubble -->
+    <label class="check-wrap" for="bubbleToggle">
+      <input type="checkbox" id="bubbleToggle" checked>
+      <span class="custom-check" aria-hidden="true"></span>
+      <span class="check-label">إظهار فقاعة الاختصار</span>
+    </label>
 
   </div>
 

@@ -21,10 +21,21 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 // POPUP MESSAGES
 // ======================
 
-// Listen for messages from popup to change timer duration
-chrome.runtime.onMessage.addListener((msg) => {
+// Listen for messages from popup / content scripts
+chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg.setTimer) {
     startTimer(msg.duration); // Update timer immediately
+    return;
+  }
+
+  if (msg.type === 'OPEN_POPUP') {
+    if (chrome.action?.openPopup) {
+      chrome.action.openPopup()
+        .then(() => sendResponse({ ok: true }))
+        .catch((err) => sendResponse({ ok: false, error: String(err?.message || err) }));
+      return true;
+    }
+    sendResponse({ ok: false, error: 'openPopup unavailable' });
   }
 });
 
